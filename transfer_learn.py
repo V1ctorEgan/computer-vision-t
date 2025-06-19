@@ -4,8 +4,12 @@ data_dir = os.path.join("data_p2","data_undersampled","train")
 print("Data directory:", data_dir)
 
 #task 2
-mean = [0.4326, 0.4952, 0.3120]
-std = [0.2179, 0.2214, 0.2091]
+# mean = [0.4326, 0.4952, 0.3120]
+# std = [0.2179, 0.2214, 0.2091]
+
+mean = [0.4326, 0.4953, 0.3120]
+
+std = [0.2178, 0.2214, 0.2091]
 
 transform_normalized = transforms.Compose(
    [ConvertToRGB(),
@@ -78,6 +82,8 @@ output_layer = torch.nn.Linear(in_features=256, out_features=5)
 
 # Add the layer to our classifier
 classifier.append(output_layer)
+
+
 # task 12
 # Create the model summary
 summary(model, input_size=batch_shape)
