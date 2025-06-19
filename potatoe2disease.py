@@ -151,3 +151,112 @@ from training import train
 epochs = 15
 
 train_losses, val_losses, train_accuracies, val_accuracies = train(model,optimizer,loss_fn,train_loader, val_loader, epochs, device=device, )
+ # 12
+ from torchvision.models import ResNet50_Weights
+model = models.resnet50(weights=ResNet50_Weights.DEFAULT)
+
+print(model)
+
+# 13
+for params in model.parameters():
+    params.requires_grad = False
+print(model)
+
+# 14
+# Important! Don't change this
+torch.manual_seed(42)
+torch.cuda.manual_seed(42)
+
+in_features = model.fc.in_features
+
+modified_last_layer = nn.Sequential()
+
+dense_layer = nn.Linear(in_features=in_features, out_features=256)
+modified_last_layer.append(dense_layer)
+
+relu = nn.ReLU()
+modified_last_layer.append(relu)
+
+modified_last_layer.append(nn.Dropout(p=0.5))
+
+output_layer = nn.Linear(in_features=256, out_features = 3)
+modified_last_layer.append(output_layer)
+
+# Assign `modified_last_layer` to `model.fc`
+model.fc = modified_last_layer
+
+print(model)
+
+# 15
+loss_fn = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters())
+
+# Place the model on device
+model.to(device)
+
+# Train the model for 10 epochs
+epochs = 10
+train_losses, val_losses, train_accuracies, val_accuracies = train(
+    model, optimizer, loss_fn, train_loader, val_loader, epochs, device=device
+)
+
+# 16
+from training import predict
+
+test_dir = os.path.join("potato_dataset","test")
+
+test_dataset = datasets.ImageFolder(root=test_dir, transform=transform_norm)
+batch_size = 10
+
+test_loader = DataLoader(test_dataset, batch_size, shuffle=False)
+
+print("Number of test images:", len(test_dataset))
+# 17
+
+# Predict the probabilities for each test image
+test_probabilities = predict(model, test_loader, device)
+
+# Get the index associated with the largest probability for each test image
+test_predictions = torch.argmax(test_probabilities, dim=1)
+# Converts the class index to the class name for each test image.
+test_classes = [train_dataset.dataset.classes[i] for i in test_predictions]
+
+print("Number of predictions:", test_predictions.shape)
+print("Predictions (class index):", test_predictions.tolist())
+print()
+print("Predictions (class name):", test_classes)
+#18
+# Import the early_stopping function
+from training import early_stopping
+epochs_to_train = 50
+checkpoint_path = "LR_model.pth"
+early_stopping_function = early_stopping
+
+train_results = train_callbacks(
+    model,
+    optimizer,
+    loss_fn,
+    train_loader,
+    val_loader,
+    epochs=epochs_to_train,
+    device=device,
+    checkpoint_path=checkpoint_path,
+    early_stopping=early_stopping_function,
+)
+
+(
+    learning_rates,
+    train_losses,
+    valid_losses,
+    train_accuracies,
+    valid_accuracies,
+    epochs,
+) = train_results
+
+#19
+# Load the model with `torch.load`
+checkpoint =torch.load("LR_model.pth")
+# Load model state dictionaries
+model.load_state_dict(checkpoint["model_state_dict"])
+
+print(model)
