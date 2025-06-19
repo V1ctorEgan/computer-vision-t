@@ -145,3 +145,9 @@ print("----------------------")
 print(next(model.parameters()).device)
 
 # 11
+# Import the train function from `training.py`
+from training import train 
+# Train the model for 15 epochs
+epochs = 15
+
+train_losses, val_losses, train_accuracies, val_accuracies = train(model,optimizer,loss_fn,train_loader, val_loader, epochs, device=device, )
