@@ -1,0 +1,54 @@
+object detection
+we use deformation models and region based CNNs (R-CNN).
+objection detection involves identifying different objects in an image as well as
+their positions.
+
+this models are usually slow becauase they make use of the image more than once
+this is a problem for real time application, e.g for images giving out 30 fps
+(frames per seconds)
+
+so sovle this problem, we use the YOLO model.
+yolo stands for you only look once, meaning it uses the image only once (only 
+make one pass of the image) and they are faster than other models but not as 
+accurate.But it is pretty accurate for its speed.
+
+what comes out of object detectcion models (e.g YOLO) are bounding boxes as well
+as what does object it detected.
+
+how YOLO works.
+YOLO has convulontional layers as well as fully connected layers
+when it takes an image, it breaks it dowm as sXs grid cells. then it tries an
+find the bounding boxes for the grid cells.
+the bounding boxes is defined by 5 (five) parameters.
+1. the x 2. the y (co-ordinates) 3. the width, 4. the height and 5. the confidence
+these are the five things that comes out of a bounding box
+
+so for an image it creates bounding boxes, but all these boxes are not kept.
+With the grid cells, it creates class probability.
+It can predict k number of objects. it finds the probability of those grid cells
+as one of those objects.
+
+			Loss functions for objection detection
+to train a custom model you need three components
+1.Labeled Training Data
+2.Model Architecture (yolo8)
+3.Loss function
+Loss function is used to check how good or poorly the model performs.
+remember that models produces probabilties of each classes using a cross 
+entropy
+
+	when building an object detection model, there are three mistakes that
+it can make:
+1.miss an object
+.detect an object that does exist in the picture
+2. detect an object, but in the wrong detection
+3. put the object in the wrong class
+because of the 3 possible mistakes, we need 3 components of the loss functions
+1. classification loss(cls): binary cross entropy
+2. Bounding box loss (box): Complete intersection over union (Ciou)
+3.Focal loss (dfl): scale version of multiclass cross entropy
+you can adjust importance of the errors by adjusting the weight associated with
+each of does losses:
+default: cls=0.5, box=7.5, dfl=1.5
+ 
+  
