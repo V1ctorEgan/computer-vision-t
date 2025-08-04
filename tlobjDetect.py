@@ -224,3 +224,73 @@ for img in tqdm(images):
 
     dest = yolo_base / "images" / split / f"{img.stem}.jpg"
     convert_image(img, dest)
+
+# task 12
+train_count = len(list((yolo_base / "images" / "train").glob("*")))
+val_count = len(list((yolo_base / "images" / "val").glob("*")))
+total_count = train_count + val_count
+
+print(f"Training fraction:   {train_count/total_count:0.3f}")
+print(f"Validation fraction: {val_count/total_count:0.3f}")
+
+# task 13
+metadata = {
+    "path": str(
+        yolo_base.absolute()
+    ),  # It's easier to specify absolute paths with YOLO.
+    
+    "train": "images/train", # Training images, relative to above.
+    
+    "val": "images/val", # Validation images
+    
+    "names": classes, # Class names, as a list
+    
+    "nc": len(classes), # Number of classes
+}
+
+print(metadata)
+
+# task 14
+yolo_config = "data.yaml"
+# Using yaml.safe_dump() protects you from some oddities in the YAML format.
+# It takes the same arguments as json.dump().
+yaml.safe_dump(metadata, open(yolo_config, 'w'))
+
+
+!cat data.yaml
+
+model = YOLO("yolov8n.pt")
+
+print(model)
+
+# task 16
+Image.open(save_dir / "PR_curve.png")
+
+# task 17
+Image.open(save_dir / "confusion_matrix_normalized.png")
+
+# task 18
+# The `.plot` method on DataFrames may be useful.
+df[["train/cls_loss", "val/cls_loss"]].plot(marker=".")
+
+
+# task 19
+saved_model = YOLO(save_dir / "weights" / "best.pt")
+
+print(saved_model)
+
+# task 20
+
+image_path = pathlib.Path("data_video" , "extracted_frames" , "frame_600.jpg")
+predict_results = saved_model.predict(
+   image_path, # Path to an image
+
+    # Only return objects detected at this confidence level or higher
+    conf=0.5,
+    # Save output to disk
+    save=True,
+)
+    
+f"Results type: {type(predict_results)}, length {len(predict_results)}"
+
+# task 21
