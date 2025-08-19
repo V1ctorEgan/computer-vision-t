@@ -1,0 +1,35 @@
+face detection is a computer vision task where we identify the present and location of a face
+face recognition is when you have a face and you need to know who the face belongs to.
+
+face detection process:
+    scan images for faces
+    look for features ( like edges and texture)
+    mark areas in the face.
+
+face recognition process:
+    face embedding: this envolves representing every face with a vector aka faceprint. that is representing every face with a bunch
+    of numbers
+    face recognition: search database of known faceprints and compare with the face embedded (compute similarity scores)
+    then find the closest one.
+    
+    face embedding is done by measuring the distances between features on the face like the eyes, nose and mouth, etc.
+
+
+in terms of computational methods, the traditional approach use methods like viola jones; which looked for patterns like where
+are the eyes , nose or mouth.
+    but the modern method relies on deep learning, specifically for face detectcion, we use MTCNN; Multi-tasked cascaded 
+    convulotional networks
+    and for face recognition we use inceptionResNet (face embedding and face matching)
+
+practical applications:
+1. security systems
+2. smartPhones: face unlock or selfie enhancement
+3. social media: automatic tagging of faces
+4.Law enforcement
+5. health care: 
+6. virtual reality.
+
+challenges
+1. variation in lighting can make face detection/recognition difficult
+2. different angles of faces
+3.
