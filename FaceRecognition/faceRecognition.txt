@@ -16,4 +16,14 @@ the dimensions can range from 128 to 512
  inception model apply these filters in parallel
  inception- Resnet v1 model uses and inception model along with a residual connection.:
  a residual connection is added to each inception module.
- inception residual are faster to train and perform better than a regular inception module
+ inception residual (inception Resnet) are faster to train and perform better than a regular inception module
+
+ - We use facenet-pytorch which has inception - Resnet v1 model
+ the Inception Resnet v1 model was trained on the VGGFace2 dataset: made up of 3.31 million images of 9131 different people
+
+ key takeways
+ - facial recognition identify people through images of their faces
+ - one way to do this is using face embedding or face print
+ - through calculating distances, we can identify faces from a database of identified / label face embeddings
+ - we use Inception Resnet for creating face embeddings
+ - it has already been trained with over 3 million images of over 9000 people 
