@@ -1,0 +1,29 @@
+face embedding are vectors, mathematical representation of the extracted features of a face.
+we can put a face in a neural network algorithm and get the result as a vectors
+e.g: someone face = [0.0423, -0.456,0.3095]. this is also called face print
+each of the above dimensions in the vector represents an extracted feature of the face.
+the dimensions can range from 128 to 512
+
+- embedding that are close might be the same person
+- we can create a database of face embeddings of people we know their identity
+- then to identify someone we can run it through a neural network algorithm to generate a face embedding then check the closest to in our
+ database.
+
+ -a neural network algorithm we can use is a inception-Resnet V1
+ - inception model was created by google in 2014 as a way to better make use of neurons
+ it makes use of convolutional layers made up of 1x1,3x3 and 5x5 filters in parallel, extracting features at different
+ scale
+ inception model apply these filters in parallel
+ inception- Resnet v1 model uses and inception model along with a residual connection.:
+ a residual connection is added to each inception module.
+ inception residual (inception Resnet) are faster to train and perform better than a regular inception module
+
+ - We use facenet-pytorch which has inception - Resnet v1 model
+ the Inception Resnet v1 model was trained on the VGGFace2 dataset: made up of 3.31 million images of 9131 different people
+
+ key takeways
+ - facial recognition identify people through images of their faces
+ - one way to do this is using face embedding or face print
+ - through calculating distances, we can identify faces from a database of identified / label face embeddings
+ - we use Inception Resnet for creating face embeddings
+ - it has already been trained with over 3 million images of over 9000 people 
