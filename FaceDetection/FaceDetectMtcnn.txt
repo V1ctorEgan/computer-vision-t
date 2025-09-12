@@ -21,4 +21,4 @@ left eye,
 right eye,
 nose,
 left mouth corner,
-right mouth corner. shape = 3,5,2
+right mouth corner. shape = 3,5,2e
