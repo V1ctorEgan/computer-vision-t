@@ -1,0 +1,56 @@
+We'll start by creating the discriminator, as it's more familiar. It's an image classifier, similar to 
+what we've made in earlier projects. We'll make a simpler one for this, so it runs a bit faster. Instead 
+of using a convolutional network, we'll flatten our image down to a vector and use standard Linear 
+(fully connected) layers. For our activation functions, we'll use LeakyReLU(0.25), except for the final 
+layer.
+
+We're trying to tell real from fake images. We could think of this as two classes, but really it's only
+ one: if it's not real, it's fake. So we'll produce an output with one value for each image. With only one output, we'll need the Sigmoid to get a result between 
+ and , instead of the SoftMax we used with multiple classes.
+
+Our network will be:
+Flatten image
+Linear layer with 1024 neurons
+LeakyReLU(0.25)
+Linear layer with 512 neurons
+LeakyReLU(0.25)
+Linear Layer with 256 neurons
+LeakyReLU(0.25)
+Linear layer to produce one output (1 neuron)
+Sigmoid
+We'll build this with a Sequential container as we have done in previous projects. Here are the first few layers to get started
+
+generators: The generator is a new structure for us. It will need to create new images out of nothing. How can we do this?
+
+We'll start by creating some random numbers. We don't want to create the entire image randomly, since that would just give us noise. Instead, we'll create a smaller noise vector, basically an array of random numbers of some size. We'll pick 
+ here, as a reasonable compromise size.
+
+We'll then run a process similar to our discriminator in reverse. Instead of getting progressively smaller numbers of neurons per layer, we'll get progressively more, until we have the 
+ we need for a 
+ x 
+ x 
+ image. We'll reshape that into an image, and output it
+
+We'll break our generator into three upsampling stages. In each of these we'll expand the size of our vector, with a Linear layer with more outputs than inputs. We'll turn off the bias term, that's the 
+ in the linear neuron equation:
+
+ 
+
+We'll then have a BatchNorm1d. This acts to speed up the training and make it go smoother. We'll follow 
+that up with a LeakyReLU(0.25) activation function, the same as the discriminator. Here's the first
+ upsampling stage.
+
+Training the GAN System
+Training will work a bit differently than in earlier projects. We aren't training a single network, but instead we're training two networks against each other. We can still use the same tools, but we'll need to organize things differently. We also don't have already labeled data, we'll have to mark our images as real or fake (we'll use the label 
+ for real and 
+ for fake).
+
+Let's start setting this up.
+
+Setup
+Because this training process is more complicated, it's going to take a while. We'll want to set up some version of checkpointing. We'll keep it 
+simple and save the model each epoch, regardless of loss values. Let's make a separate directory for each time we run this, we can label them with the current date and time. We'll use datetime to get the time and format it in a readable way.
+
+We'll also need a loss function. We'll use the same one for both, the BCELoss. This is the binary cross entropy, very similar to the cross entropy we've used in previous projects. The biggest differences are that this is only expecting one class, and that it expects predictions that have been run through the Sigmoid function. If we hadn't included the Sigmoid to get predictions between 
+ and 
+, we'd need the BCEWithLogitsLoss instead.
